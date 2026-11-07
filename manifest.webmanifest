@@ -1,0 +1,9 @@
+{
+  "name": "SAI — Smart AI",
+  "short_name": "SAI",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b1022",
+  "theme_color": "#0b1022",
+  "description": "SAI multilingual AI assistant prototype"
+}

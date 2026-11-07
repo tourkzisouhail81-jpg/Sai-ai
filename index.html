@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1022">
+<title>SAI — Smart AI</title>
+<style>
+:root{--bg:#0b1022;--panel:#151e38;--panel2:#202b4a;--text:#f5f6ff;--muted:#91a0c8;--line:#273454;--accent:#8b45f6;--accent2:#6734d9;--user:#7139df}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,sans-serif;min-height:100dvh}
+.app{max-width:900px;margin:auto;min-height:100dvh;display:flex;flex-direction:column}
+header{position:sticky;top:0;z-index:2;background:rgba(11,16,34,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 16px;display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:15px;background:linear-gradient(135deg,#a45cff,#6231d6);display:grid;place-items:center;font-weight:800;font-size:20px;box-shadow:0 8px 25px #7139df55}
+.brand{flex:1}.brand strong{display:block;font-size:18px}.brand small{color:var(--muted)}
+select,button{font:inherit;color:inherit}select,.iconbtn{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px}
+.iconbtn{cursor:pointer;min-width:42px}
+main{flex:1;padding:22px 16px 150px}
+.hero{text-align:center;margin:22px auto 30px;max-width:560px}.orb{margin:auto auto 14px;width:66px;height:66px;border-radius:24px;background:linear-gradient(135deg,#a45cff,#6231d6);display:grid;place-items:center;font-size:29px;box-shadow:0 12px 35px #7139df55}
+h1{font-size:27px;margin:0 0 7px}.hero p{color:var(--muted);margin:0;line-height:1.6}
+.notice{margin:0 auto 18px;max-width:650px;padding:11px 14px;border:1px solid #66532b;background:#261f18;color:#f3d68c;border-radius:14px;font-size:13px;line-height:1.5}
+.messages{max-width:700px;margin:auto;display:flex;flex-direction:column;gap:16px}
+.msg{display:flex;gap:9px;align-items:flex-start}.msg.user{justify-content:flex-end}.avatar{width:31px;height:31px;border-radius:11px;background:#222d4d;display:grid;place-items:center;flex:none;font-size:14px}
+.bubble{max-width:min(82%,620px);padding:13px 15px;border-radius:18px;background:var(--panel);line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.user .bubble{background:linear-gradient(135deg,var(--user),#5930c6);border-top-right-radius:5px}
+.bot .bubble{border-top-left-radius:5px}.stamp{font-size:11px;color:var(--muted);margin:5px 4px 0}
+.composer-wrap{position:fixed;bottom:0;left:0;right:0;padding:12px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 18%);z-index:3}
+.composer{max-width:870px;margin:auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:8px;display:flex;gap:8px;align-items:flex-end;box-shadow:0 10px 35px #0005}
+textarea{resize:none;flex:1;min-height:44px;max-height:130px;background:transparent;border:0;outline:0;color:var(--text);font:inherit;padding:10px 11px}
+textarea::placeholder{color:#8190b8}.send{border:0;border-radius:15px;background:linear-gradient(135deg,#a45cff,#6532dc);width:46px;height:46px;font-size:20px;cursor:pointer}
+.footer{text-align:center;color:var(--muted);font-size:11px;padding:8px}
+.tools{display:flex;justify-content:center;gap:9px;margin-top:18px;flex-wrap:wrap}.tools button{background:var(--panel);border:1px solid var(--line);padding:9px 12px;border-radius:13px;font-size:13px;cursor:pointer}
+.light{--bg:#f4f5fb;--panel:#fff;--panel2:#edf0fa;--text:#171b2d;--muted:#65708e;--line:#dce1f0;--user:#7542e7}
+.light header{background:#f4f5fbeb}.light .notice{background:#fff8e9;color:#77561c}
+@media(min-width:700px){main{padding-top:38px}.hero{margin-top:35px}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<header>
+ <div class="logo">S</div>
+ <div class="brand"><strong>SAI</strong><small>Smart AI · Version 0.1</small></div>
+ <select id="lang" aria-label="Language">
+  <option value="auto">Auto</option><option value="ar">العربية</option><option value="darija">Darija</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option>
+ </select>
+ <button class="iconbtn" id="theme" title="Toggle theme">☼</button>
+ <button class="iconbtn" id="clear" title="Clear chat">⌫</button>
+</header>
+<main>
+ <section class="hero" id="hero">
+  <div class="orb">✦</div><h1 id="welcome">Hello! I'm SAI.</h1>
+  <p id="sub">Your multilingual assistant prototype. Ask a question to try the demo.</p>
+  <div class="tools">
+   <button data-prompt="Explain a difficult idea simply.">✧ Explain something</button>
+   <button data-prompt="Give me three creative project ideas.">☷ Ideas</button>
+   <button data-prompt="Help me make a study plan.">▤ Study plan</button>
+  </div>
+ </section>
+ <div class="notice" id="notice">DEMO MODE — SAI is currently a local prototype. It does not connect to a real AI model yet, so replies are examples rather than live AI answers.</div>
+ <section class="messages" id="messages" aria-live="polite"></section>
+</main>
+<div class="composer-wrap">
+ <div class="composer">
+  <textarea id="input" rows="1" placeholder="Message SAI..." aria-label="Message SAI"></textarea>
+  <button class="send" id="send" aria-label="Send">➤</button>
+ </div>
+ <div class="footer">SAI can make mistakes. Demo replies are not generated by a live AI model.</div>
+</div>
+</div>
+<script>
+const $=s=>document.querySelector(s), messages=$('#messages'), input=$('#input');
+const labels={
+ en:{welcome:"Hello! I'm SAI.",sub:"Your multilingual assistant prototype. Ask a question to try the demo.",placeholder:"Message SAI...",notice:"DEMO MODE — SAI is currently a local prototype. It does not connect to a real AI model yet, so replies are examples rather than live AI answers."},
+ ar:{welcome:"مرحباً! أنا SAI.",sub:"مساعدك متعدد اللغات — نسخة تجريبية أولية.",placeholder:"اكتب رسالتك إلى SAI...",notice:"الوضع التجريبي — SAI حالياً نموذج أولي محلي، وليس متصلاً بنموذج ذكاء اصطناعي حقيقي."},
+ darija:{welcome:"سلام! أنا SAI.",sub:"المساعد ديالك — نسخة تجريبية متعددة اللغات.",placeholder:"كتب رسالتك لـ SAI...",notice:"الوضع التجريبي — SAI دابا غير نموذج أولي محلي، مازال ما مربوطش بذكاء اصطناعي حقيقي."},
+ fr:{welcome:"Bonjour ! Je suis SAI.",sub:"Votre assistant multilingue — prototype.",placeholder:"Écrivez à SAI...",notice:"MODE DÉMO — SAI est un prototype local et n'est pas encore connecté à un vrai modèle IA."},
+ es:{welcome:"¡Hola! Soy SAI.",sub:"Tu asistente multilingüe — prototipo.",placeholder:"Escribe a SAI...",notice:"MODO DEMO — SAI es un prototipo local y todavía no está conectado a un modelo de IA real."}
+};
+let history=[];
+function currentLang(){let v=$('#lang').value;if(v!=='auto')return v;let t=input.value;if(/[٠-٩\u0600-\u06FF]/.test(t))return 'ar';if(/[àâçéèêëîïôûùüÿœ]/i.test(t))return 'fr';if(/\b(hola|gracias|como|qué)\b/i.test(t))return 'es';return 'en'}
+function applyLang(){let l=$('#lang').value==='auto'?'en':$('#lang').value;let x=labels[l]||labels.en;$('#welcome').textContent=x.welcome;$('#sub').textContent=x.sub;input.placeholder=x.placeholder;$('#notice').textContent=x.notice}
+function add(text,who){let row=document.createElement('div');row.className='msg '+(who==='user'?'user':'bot');let av=document.createElement('div');av.className='avatar';av.textContent=who==='user'?'You':'✦';let b=document.createElement('div');b.className='bubble';b.textContent=text;let wrap=document.createElement('div');wrap.appendChild(b);let tm=document.createElement('div');tm.className='stamp';tm.textContent=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});wrap.appendChild(tm);if(who==='user'){row.append(wrap,av)}else{row.append(av,wrap)}messages.append(row);row.scrollIntoView({behavior:'smooth',block:'end'});history.push({who,text});}
+function demoReply(text,l){let t=text.toLowerCase();if(l==='darija'||l==='ar'){
+ if(/سلام|مرحبا|السلام/.test(text))return l==='darija'?"وعليكم السلام! أنا SAI، هادي نسخة تجريبية. نقدر نوريك كيفاش غادي تكون المحادثة، ولكن الأجوبة دابا أمثلة محلية ماشي من نموذج AI حقيقي.":"وعليكم السلام! أنا SAI. هذه نسخة تجريبية، والإجابات الحالية أمثلة محلية وليست مولّدة من نموذج ذكاء اصطناعي حقيقي.";
+ if(/شكون|من أنت|شنو نتا/.test(text))return "أنا SAI (Smart AI)، مساعد رقمي قيد التطوير. الهدف هو دعم لغات متعددة، ومنها الدارجة المغربية. حالياً أعمل في وضع تجريبي فقط.";
+ return "شكراً على رسالتك! هادي نسخة SAI التجريبية. باش نجاوبك بذكاء حقيقي، خاصنا نربط التطبيق بنموذج لغوي ونستضيفه بطريقة آمنة. دابا نقدروا نكملو تطوير الواجهة وتجربة المحادثة.";
+ }
+ if(l==='fr')return "Merci pour votre message ! SAI est encore en mode démonstration. Cette réponse est un exemple local, pas une réponse générée par un modèle d'IA connecté.";
+ if(l==='es')return "¡Gracias por tu mensaje! SAI sigue en modo de demostración. Esta respuesta es un ejemplo local, no una respuesta generada por un modelo de IA conectado.";
+ return "Thanks for your message! SAI is currently running in demo mode. This is a local example response, not an answer generated by a connected AI model. The next development step is connecting a suitable model through a secure backend.";
+}
+function send(){let text=input.value.trim();if(!text)return;let l=currentLang();add(text,'user');input.value='';input.style.height='44px';setTimeout(()=>add(demoReply(text,l),'bot'),350)}
+$('#send').addEventListener('click',send);input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+input.addEventListener('input',()=>{input.style.height='44px';input.style.height=Math.min(input.scrollHeight,130)+'px'});
+$('#lang').addEventListener('change',applyLang);
+$('#theme').addEventListener('click',()=>$('#app').classList.toggle('light'));
+$('#clear').addEventListener('click',()=>{messages.innerHTML='';history=[]});
+document.querySelectorAll('[data-prompt]').forEach(b=>b.addEventListener('click',()=>{input.value=b.dataset.prompt;send()}));
+applyLang();
+</script>
+</body></html>
